@@ -1,0 +1,30 @@
+import pandas as pd
+
+path_bikes = 'Archivos\Bikes.xlsx'
+path_bikeshops = 'Archivos\Bikeshops.xlsx'
+path_orderlines = 'Archivos\orderlines.xlsx'
+
+# Lee Excel Bikes y crea Dataframe
+d1 = pd.read_excel(path_bikes)
+df_bikes = pd.DataFrame(d1)
+
+# Lee Excel orderlines y crea Dataframe
+d2 = pd.read_excel(path_orderlines)
+df_orderlines = pd.DataFrame(d2)
+
+# Lee Excel bikeshops y crea Dataframe
+d3 = pd.read_excel(path_bikeshops)
+df_bikeshops = pd.DataFrame(d3)
+
+# Join entre los Dataframes
+df_join_inicial = df_bikes.join(df_orderlines.set_index('product.id'), on='bike.id')
+df_join_total = df_join_inicial.join(df_bikeshops.set_index('bikeshop.id'), on='order.line')
+
+# Tambien se puede de esta forma pero queda mas largo
+# df_join_total = df_bikes.join(df_orderlines.set_index('product.id'), on='bike.id').join(df_bikeshops.set_index('bikeshop.id'), on='order.line')
+
+# Filtrar por Bike.ID = 1
+rslt_df = df_join_total.loc[(df_join_total['bike.id'] == 1)]
+#print(rslt_df)
+
+display(df_join_total)
